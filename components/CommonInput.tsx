@@ -10,23 +10,32 @@ import {
 interface CommonInputProps extends TextInputProps {
   label: string;
   variation?: "filled" | "standard" | "outlined";
+  error?: string;
 }
 
 export default function CommonInput({
   label,
   variation = "filled",
+  error,
   ...props
 }: CommonInputProps) {
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
-      <View style={[styles.inputWrapper, styles[variation]]}>
+      <View
+        style={[
+          styles.inputWrapper,
+          styles[variation],
+          Boolean(error) && styles.errorInput,
+        ]}
+      >
         <TextInput
           {...props}
           style={[styles.input]}
           placeholderTextColor={color.GRAY_500}
         />
       </View>
+      {error && <Text style={styles.error}>{error}</Text>}
     </View>
   );
 }
@@ -54,5 +63,13 @@ const styles = StyleSheet.create({
     flex: 1,
     color: color.BLACK,
     fontSize: 14,
+  },
+  errorInput: {
+    backgroundColor: color.RED_100,
+  },
+  error: {
+    fontSize: 12,
+    color: color.RED_500,
+    marginTop: 5,
   },
 });
