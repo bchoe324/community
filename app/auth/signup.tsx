@@ -29,7 +29,7 @@ export default function SignupScreen() {
     <FormProvider {...signupForm}>
       <View style={styles.container}>
         <EmailInput />
-        <PasswordInput />
+        <PasswordInput submitBehavior="submit" />
         <PasswordConfirmInput />
       </View>
       <FixedBottomCTA

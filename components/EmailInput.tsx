@@ -2,7 +2,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import CommonInput from "./CommonInput";
 
 export default function EmailInput() {
-  const { control } = useFormContext();
+  const { control, setFocus } = useFormContext();
   return (
     <Controller
       name="email"
@@ -25,6 +25,12 @@ export default function EmailInput() {
         <CommonInput
           label="이메일"
           placeholder="이메일을 입력해주세요"
+          keyboardType="email-address"
+          submitBehavior="submit"
+          returnKeyType="next"
+          onSubmitEditing={() => {
+            setFocus("password");
+          }}
           value={value}
           onChangeText={onChange}
           error={error?.message}

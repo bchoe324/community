@@ -1,4 +1,5 @@
 import { color } from "@/constants";
+import { ForwardedRef, forwardRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,12 +14,10 @@ interface CommonInputProps extends TextInputProps {
   error?: string;
 }
 
-export default function CommonInput({
-  label,
-  variation = "filled",
-  error,
-  ...props
-}: CommonInputProps) {
+function CommonInput(
+  { label, variation = "filled", error, ...props }: CommonInputProps,
+  ref?: ForwardedRef<TextInput>
+) {
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
@@ -31,6 +30,10 @@ export default function CommonInput({
       >
         <TextInput
           {...props}
+          ref={ref}
+          autoCapitalize="none"
+          autoCorrect={false}
+          spellCheck={false}
           style={[styles.input]}
           placeholderTextColor={color.GRAY_500}
         />
@@ -73,3 +76,5 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 });
+
+export default forwardRef(CommonInput);
