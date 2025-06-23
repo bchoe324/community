@@ -1,6 +1,7 @@
 import EmailInput from "@/components/EmailInput";
 import FixedBottomCTA from "@/components/FixedBottomCTA";
 import PasswordInput from "@/components/PasswordInput";
+import useAuth from "@/hooks/queries/useAuth";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
@@ -11,6 +12,8 @@ type loginFormType = {
 };
 
 export default function LoginScreen() {
+  const { loginMutation } = useAuth();
+
   const loginForm = useForm<loginFormType>({
     defaultValues: {
       email: "",
@@ -19,7 +22,8 @@ export default function LoginScreen() {
   });
 
   const handleSubmit = (data: loginFormType) => {
-    console.log(data);
+    const { email, password } = data;
+    loginMutation.mutate({ email, password });
   };
 
   return (
@@ -29,7 +33,7 @@ export default function LoginScreen() {
         <PasswordInput />
       </View>
       <FixedBottomCTA
-        label="회원가입하기"
+        label="로그인하기"
         onPress={loginForm.handleSubmit(handleSubmit)}
       />
     </FormProvider>
