@@ -1,7 +1,8 @@
 import FeedList from "@/components/FeedList";
+import { color } from "@/constants";
 import { Post } from "@/types";
 import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 
 const mockPost: Post[] = [
   {
@@ -63,8 +64,15 @@ const mockPost: Post[] = [
 export default function HomeScreen() {
   const router = useRouter();
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.container}>
       <FeedList posts={mockPost} />
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: color.WHITE,
+  },
+});

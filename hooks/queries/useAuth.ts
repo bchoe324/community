@@ -1,4 +1,5 @@
 import { getMe, postLogin, postSignup } from "@/api/auth";
+import { queryClient } from "@/api/queryClient";
 import { deleteHeader, setHeader } from "@/utils/header";
 import { deleteSecureStore, setSecureStore } from "@/utils/secureStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -26,6 +27,7 @@ function useLogin() {
     onSuccess: async ({ accessToken }) => {
       setHeader("Authorization", `Bearer ${accessToken}`);
       await setSecureStore("accessToken", accessToken);
+      queryClient.fetchQuery({ queryKey: ["auth", "getMe"] });
       router.replace("/");
     },
     onError: (error) => {},
@@ -46,11 +48,17 @@ export default function useAuth() {
   const { data } = useGetMe();
   const loginMutation = useLogin();
   const signupMutation = useSignup();
+  const logout = () => {
+    deleteHeader("Authorization");
+    deleteSecureStore("accessToken");
+    queryClient.resetQueries({ queryKey: ["auth"] });
+  };
   return {
     auth: {
       id: data?.id || "",
     },
     loginMutation,
     signupMutation,
+    logout,
   };
 }

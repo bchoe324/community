@@ -16,7 +16,7 @@ export default function FeedList({ posts }: { posts: Post[] }) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 12,
+    paddingVertical: 12,
     backgroundColor: color.GRAY_200,
     gap: 12,
   },

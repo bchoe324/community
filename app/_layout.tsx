@@ -1,15 +1,10 @@
 import { queryClient } from "@/api/queryClient";
-import useAuth from "@/hooks/queries/useAuth";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import "react-native-reanimated";
 
 function RootNavigator() {
-  const { auth } = useAuth();
-
-  console.log(auth);
-
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
