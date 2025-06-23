@@ -1,57 +1,42 @@
-import CommonInput from "@/components/CommonInput";
+import PasswordConfirmInput from "@/components/\bPasswordConfirmInput";
+import EmailInput from "@/components/EmailInput";
 import FixedBottomCTA from "@/components/FixedBottomCTA";
-import React, { useState } from "react";
+import PasswordInput from "@/components/PasswordInput";
+import React from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 
+type signupFormType = {
+  email: string;
+  password: string;
+  passwordConfirm: string;
+};
+
 export default function SignupScreen() {
-  const [signupValues, setSignupValues] = useState({
-    email: "",
-    password: "",
-    passwordConfirm: "",
-  });
-  const [error, setError] = useState({
-    email: "",
-    password: "",
-    passwordConfirm: "",
+  const signupForm = useForm<signupFormType>({
+    defaultValues: {
+      email: "",
+      password: "",
+      passwordConfirm: "",
+    },
   });
 
-  const handleChange = (value: string, target: string) => {
-    setSignupValues((prev) => ({ ...prev, [target]: value }));
-  };
-
-  const handleSubmit = () => {
-    if (signupValues.email.length === 0) {
-      setError((prev) => ({ ...prev, email: "이메일을 입력해주세요." }));
-    }
+  const handleSubmit = (data: signupFormType) => {
+    console.log(data);
   };
 
   return (
-    <>
+    <FormProvider {...signupForm}>
       <View style={styles.container}>
-        <CommonInput
-          label="이메일"
-          placeholder="이메일을 입력해주세요"
-          value={signupValues.email}
-          onChangeText={(text) => handleChange(text, "email")}
-          error={error.email}
-        />
-        <CommonInput
-          label="비밀번호"
-          placeholder="비밀번호를 입력해주세요"
-          value={signupValues.password}
-          onChangeText={(text) => handleChange(text, "password")}
-          error={error.password}
-        />
-        <CommonInput
-          label="비밀번호 확인"
-          placeholder="비밀번호를 입력해주세요"
-          value={signupValues.passwordConfirm}
-          onChangeText={(text) => handleChange(text, "passwordConfirm")}
-          error={error.passwordConfirm}
-        />
+        <EmailInput />
+        <PasswordInput />
+        <PasswordConfirmInput />
       </View>
-      <FixedBottomCTA label="회원가입하기" onPress={handleSubmit} />
-    </>
+      <FixedBottomCTA
+        label="회원가입하기"
+        onPress={signupForm.handleSubmit(handleSubmit)}
+      />
+    </FormProvider>
   );
 }
 
