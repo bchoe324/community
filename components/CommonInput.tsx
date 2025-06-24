@@ -26,6 +26,7 @@ function CommonInput(
           styles.inputWrapper,
           styles[variation],
           Boolean(error) && styles.errorInput,
+          props.multiline && styles.multiline,
         ]}
       >
         <TextInput
@@ -56,6 +57,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: "center",
     paddingHorizontal: 10,
+  },
+  multiline: {
+    height: 200,
   },
   filled: {
     backgroundColor: color.GRAY_100,

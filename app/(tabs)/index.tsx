@@ -1,8 +1,9 @@
 import FeedList from "@/components/FeedList";
 import { color } from "@/constants";
 import { Post } from "@/types";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { Pressable, SafeAreaView, StyleSheet } from "react-native";
 
 const mockPost: Post[] = [
   {
@@ -66,6 +67,12 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <FeedList posts={mockPost} />
+      <Pressable
+        style={styles.writeButton}
+        onPress={() => router.push("/post/write")}
+      >
+        <Ionicons name="pencil" size={32} color={color.WHITE} />
+      </Pressable>
     </SafeAreaView>
   );
 }
@@ -74,5 +81,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.WHITE,
+  },
+  writeButton: {
+    backgroundColor: color.ORANGE_600,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    position: "absolute",
+    bottom: 16,
+    right: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: color.BLACK,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 3,
   },
 });
