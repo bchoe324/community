@@ -1,5 +1,5 @@
 import CommonButton from "@/components/CommonButton";
-import { color } from "@/constants";
+import { colors } from "@/constants";
 import { Link, useRouter } from "expo-router";
 import { Image, SafeAreaView, StyleSheet, View } from "react-native";
 
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   signupLink: {
-    color: color.GRAY_700,
+    color: colors.GRAY_700,
     fontSize: 14,
     textDecorationLine: "underline",
   },

@@ -1,6 +1,6 @@
-import PasswordConfirmInput from "@/components/\bPasswordConfirmInput";
 import EmailInput from "@/components/EmailInput";
 import FixedBottomCTA from "@/components/FixedBottomCTA";
+import PasswordConfirmInput from "@/components/PasswordConfirmInput";
 import PasswordInput from "@/components/PasswordInput";
 import useAuth from "@/hooks/queries/useAuth";
 import React from "react";

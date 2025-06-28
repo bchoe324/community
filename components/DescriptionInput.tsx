@@ -7,6 +7,13 @@ export default function DescriptionInput() {
     <Controller
       name="description"
       control={control}
+      rules={{
+        validate: (value) => {
+          if (value.length < 5) {
+            return "5자 이상 입력해주세요.";
+          }
+        },
+      }}
       render={({ field: { ref, onChange, value }, fieldState: { error } }) => (
         <CommonInput
           label="내용"

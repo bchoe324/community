@@ -1,5 +1,5 @@
-import { color } from "@/constants";
-import { ForwardedRef, forwardRef } from "react";
+import { colors } from "@/constants";
+import { ForwardedRef, forwardRef, ReactNode } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,13 +9,14 @@ import {
 } from "react-native";
 
 interface CommonInputProps extends TextInputProps {
-  label: string;
-  variation?: "filled" | "standard" | "outlined";
+  label?: string;
+  variant?: "filled" | "standard" | "outlined";
   error?: string;
+  rightChild?: ReactNode;
 }
 
 function CommonInput(
-  { label, variation = "filled", error, ...props }: CommonInputProps,
+  { label, variant = "filled", error, rightChild, ...props }: CommonInputProps,
   ref?: ForwardedRef<TextInput>
 ) {
   return (
@@ -24,7 +25,7 @@ function CommonInput(
       <View
         style={[
           styles.inputWrapper,
-          styles[variation],
+          styles[variant],
           Boolean(error) && styles.errorInput,
           props.multiline && styles.multiline,
         ]}
@@ -36,8 +37,9 @@ function CommonInput(
           autoCorrect={false}
           spellCheck={false}
           style={[styles.input]}
-          placeholderTextColor={color.GRAY_500}
+          placeholderTextColor={colors.GRAY_500}
         />
+        {rightChild}
       </View>
       {error && <Text style={styles.error}>{error}</Text>}
     </View>
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
   container: {},
   label: {
     fontSize: 12,
-    color: color.GRAY_700,
+    color: colors.GRAY_700,
     marginBottom: 5,
   },
   inputWrapper: {
@@ -56,27 +58,29 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 8,
     justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 10,
+    flexDirection: "row",
   },
   multiline: {
     height: 200,
   },
   filled: {
-    backgroundColor: color.GRAY_100,
+    backgroundColor: colors.GRAY_100,
   },
   standard: {},
   outlined: {},
   input: {
     flex: 1,
-    color: color.BLACK,
+    color: colors.BLACK,
     fontSize: 14,
   },
   errorInput: {
-    backgroundColor: color.RED_100,
+    backgroundColor: colors.RED_100,
   },
   error: {
     fontSize: 12,
-    color: color.RED_500,
+    color: colors.RED_500,
     marginTop: 5,
   },
 });

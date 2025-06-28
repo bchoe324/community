@@ -1,15 +1,46 @@
-import { color } from "@/constants";
-import { Post } from "@/types";
+import { colors } from "@/constants";
+import useGetInfinitePosts from "@/hooks/queries/useGetInfinitePosts";
+import { useScrollToTop } from "@react-navigation/native";
+import { useRef, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import FeedItem from "./FeedItem";
 
-export default function FeedList({ posts }: { posts: Post[] }) {
+export default function FeedList() {
+  const {
+    data: posts,
+    hasNextPage,
+    isRefetching,
+    refetch,
+    fetchNextPage,
+  } = useGetInfinitePosts();
+  const [isRefreshing, setRefreshing] = useState(false);
+  const ref = useRef<FlatList | null>(null);
+
+  useScrollToTop(ref);
+
+  const handleEndReached = () => {
+    if (hasNextPage && !isRefetching) {
+      fetchNextPage();
+    }
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
+
   return (
     <FlatList
-      data={posts}
+      ref={ref}
+      data={posts?.pages.flat()}
       renderItem={({ item }) => <FeedItem post={item} />}
       keyExtractor={(item) => String(item.id)}
       contentContainerStyle={styles.container}
+      onEndReached={handleEndReached}
+      onEndReachedThreshold={0.5}
+      refreshing={isRefreshing}
+      onRefresh={handleRefresh}
     />
   );
 }
@@ -17,7 +48,7 @@ export default function FeedList({ posts }: { posts: Post[] }) {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 12,
-    backgroundColor: color.GRAY_200,
+    backgroundColor: colors.GRAY_200,
     gap: 12,
   },
 });

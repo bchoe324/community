@@ -1,4 +1,5 @@
-import { color } from "@/constants";
+import { colors } from "@/constants";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { ReactNode } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -8,6 +9,7 @@ interface FeedProfileProps {
   createdAt: string;
   option?: ReactNode;
   onPress: () => void;
+  isReply?: boolean;
 }
 
 export default function FeedProfile({
@@ -16,10 +18,18 @@ export default function FeedProfile({
   createdAt,
   option,
   onPress,
+  isReply = false,
 }: FeedProfileProps) {
   return (
     <View style={styles.container}>
       <Pressable style={styles.profileContainer} onPress={onPress}>
+        {isReply && (
+          <MaterialCommunityIcons
+            name="arrow-right-bottom"
+            size={24}
+            color={colors.BLACK}
+          />
+        )}
         <Image
           source={
             imageUri
@@ -40,7 +50,9 @@ export default function FeedProfile({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 28,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   profileContainer: {
     flexDirection: "row",
@@ -52,7 +64,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: "50%",
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: color.GRAY_500,
+    borderColor: colors.GRAY_500,
   },
   textContainer: {
     gap: 4,
@@ -63,6 +75,6 @@ const styles = StyleSheet.create({
   },
   createdAt: {
     fontSize: 14,
-    color: color.GRAY_500,
+    color: colors.GRAY_500,
   },
 });

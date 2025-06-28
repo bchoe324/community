@@ -1,14 +1,15 @@
-import { color } from "@/constants";
+import { colors } from "@/constants";
 import Feather from "@expo/vector-icons/Feather";
-import { Link, Stack } from "expo-router";
+import { Link, router, Stack } from "expo-router";
+import { Pressable } from "react-native";
 
 export default function PostLayout() {
   return (
     <Stack
       screenOptions={{
-        headerTintColor: color.BLACK,
+        headerTintColor: colors.BLACK,
         contentStyle: {
-          backgroundColor: color.WHITE,
+          backgroundColor: colors.WHITE,
         },
       }}
     >
@@ -18,8 +19,34 @@ export default function PostLayout() {
           title: "글쓰기",
           headerLeft: () => (
             <Link href="/" replace>
-              <Feather name="arrow-left" size={28} color={color.BLACK} />
+              <Feather name="arrow-left" size={28} color={colors.BLACK} />
             </Link>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="update/[id]"
+        options={{
+          title: "수정",
+          headerLeft: () => (
+            <Pressable onPress={() => router.back()}>
+              <Feather name="arrow-left" size={28} color={colors.BLACK} />
+            </Pressable>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="[id]"
+        options={{
+          title: "",
+          headerLeft: () => (
+            <Pressable
+              onPress={() =>
+                router.canGoBack() ? router.back() : router.replace("/")
+              }
+            >
+              <Feather name="arrow-left" size={28} color={colors.BLACK} />
+            </Pressable>
           ),
         }}
       />

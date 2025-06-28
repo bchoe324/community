@@ -1,4 +1,4 @@
-import { color } from "@/constants";
+import { colors } from "@/constants";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Tabs } from "expo-router";
 import React from "react";
@@ -7,7 +7,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: color.ORANGE_600,
+        tabBarActiveTintColor: colors.ORANGE_600,
         headerShown: false,
       }}
     >

@@ -1,4 +1,4 @@
-import { color } from "@/constants";
+import { colors } from "@/constants";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CommonButton from "./CommonButton";
@@ -28,6 +28,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 12,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: color.GRAY_300,
+    borderTopColor: colors.GRAY_300,
   },
 });
