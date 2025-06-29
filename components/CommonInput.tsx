@@ -64,6 +64,8 @@ const styles = StyleSheet.create({
   },
   multiline: {
     height: 200,
+    alignItems: "flex-start",
+    paddingVertical: 5,
   },
   filled: {
     backgroundColor: colors.GRAY_100,

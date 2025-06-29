@@ -10,6 +10,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import FeedProfile from "./FeedProfile";
+import ImagePreviewList from "./ImagePreviewList";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -83,6 +84,9 @@ export default function FeedItem({ post, isDetail = false }: FeedItemProps) {
           <Text style={styles.title}>{post.title}</Text>
           <Text style={styles.description}>{post.description}</Text>
         </View>
+        <View style={styles.imageContainer}>
+          <ImagePreviewList imageUris={post.imageUris} />
+        </View>
       </View>
       <View style={styles.menuContainer}>
         <Pressable style={styles.menuItem}>
@@ -134,6 +138,9 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     color: colors.BLACK,
+  },
+  imageContainer: {
+    marginTop: 14,
   },
   menuContainer: {
     flexDirection: "row",
