@@ -6,13 +6,15 @@ import { colors } from "@/constants";
 import useCreateComment from "@/hooks/queries/useCreateComment";
 import useGetPost from "@/hooks/queries/useGetPost";
 import { useLocalSearchParams } from "expo-router";
-import React, { useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import {
+  Keyboard,
   Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -22,6 +24,9 @@ export default function PostDetailScreen() {
   const { data, isPending, isError } = useGetPost(Number(id));
   const [comment, setComment] = useState("");
   const createComment = useCreateComment();
+  const scrollViewRef = useRef<ScrollView | null>(null);
+  const inputRef = useRef<TextInput | null>(null);
+  const [parentCommentId, setParentCommentId] = useState<number | null>(null);
 
   if (isPending || isError) {
     return <></>;
@@ -32,31 +37,73 @@ export default function PostDetailScreen() {
   };
 
   const handleCommentSubmit = () => {
-    createComment.mutate({
+    const commentData = {
       content: comment,
       postId: data.id,
-    });
+    };
+
+    if (parentCommentId) {
+      createComment.mutate({
+        ...commentData,
+        parentCommentId: parentCommentId,
+      });
+      handleCancelReply();
+      return;
+    }
+    createComment.mutate(commentData);
     setComment("");
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 500);
+  };
+
+  const handleReply = (commentId: number) => {
+    setParentCommentId(commentId);
+    inputRef.current?.focus();
+  };
+
+  const handleCancelReply = () => {
+    setParentCommentId(null);
+    Keyboard.dismiss();
+    setComment("");
+    inputRef.current?.blur();
   };
 
   return (
     <AuthRoute>
       <SafeAreaView style={styles.container}>
         <KeyboardAwareScrollView contentContainerStyle={styles.awareContainer}>
-          <ScrollView style={styles.scrollView}>
+          <ScrollView
+            ref={scrollViewRef}
+            style={{ marginBottom: 75 }}
+            contentContainerStyle={styles.scrollView}
+          >
             <FeedItem post={data} isDetail={true} />
             <Text style={styles.commentCount}>댓글 {data.commentCount}개</Text>
             {data.comments?.map((comment) => (
-              <CommentItem key={comment.id} comment={comment} />
+              <Fragment key={comment.id}>
+                <CommentItem
+                  comment={comment}
+                  parentCommentId={parentCommentId}
+                  onReply={() => handleReply(comment.id)}
+                  onCancelReply={handleCancelReply}
+                />
+                {comment.replies?.map((reply) => (
+                  <CommentItem key={reply.id} comment={reply} isReply />
+                ))}
+              </Fragment>
             ))}
           </ScrollView>
           <View style={styles.commentInputContainer}>
             <CommonInput
-              placeholder="댓글을 남겨보세요."
+              placeholder={
+                parentCommentId ? "답글 남기는 중..." : "댓글을 남겨보세요."
+              }
               value={comment}
               returnKeyType="send"
               onChangeText={handleCommentChange}
               onSubmitEditing={handleCommentSubmit}
+              ref={inputRef}
               rightChild={
                 <Pressable
                   style={styles.commentButton}
@@ -85,6 +132,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     marginTop: 12,
+    backgroundColor: colors.GRAY_200,
   },
   commentCount: {
     marginTop: 12,

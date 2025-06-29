@@ -1,5 +1,4 @@
 import { colors } from "@/constants";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { ReactNode } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -9,7 +8,6 @@ interface FeedProfileProps {
   createdAt: string;
   option?: ReactNode;
   onPress: () => void;
-  isReply?: boolean;
 }
 
 export default function FeedProfile({
@@ -18,18 +16,10 @@ export default function FeedProfile({
   createdAt,
   option,
   onPress,
-  isReply = false,
 }: FeedProfileProps) {
   return (
     <View style={styles.container}>
       <Pressable style={styles.profileContainer} onPress={onPress}>
-        {isReply && (
-          <MaterialCommunityIcons
-            name="arrow-right-bottom"
-            size={24}
-            color={colors.BLACK}
-          />
-        )}
         <Image
           source={
             imageUri
@@ -50,6 +40,7 @@ export default function FeedProfile({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
