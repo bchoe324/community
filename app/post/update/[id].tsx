@@ -1,6 +1,7 @@
 import CommonButton from "@/components/CommonButton";
 import DescriptionInput from "@/components/DescriptionInput";
 import TitleInput from "@/components/TitleInput";
+import VoteAttached from "@/components/VoteAttached";
 import useGetPost from "@/hooks/queries/useGetPost";
 import useUpdatePost from "@/hooks/queries/useUpdatePost";
 import { ImageUri } from "@/types";
@@ -14,6 +15,7 @@ interface updateFormType {
   title: string;
   description: string;
   imageUris: ImageUri[];
+  isVoteAttached: boolean;
 }
 
 export default function PostUpdateScreen() {
@@ -27,6 +29,7 @@ export default function PostUpdateScreen() {
       title: data?.title ?? "",
       description: data?.description ?? "",
       imageUris: data?.imageUris ?? [],
+      isVoteAttached: data?.hasVote,
     },
   });
 
@@ -55,6 +58,7 @@ export default function PostUpdateScreen() {
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <TitleInput />
         <DescriptionInput />
+        <VoteAttached />
       </KeyboardAwareScrollView>
     </FormProvider>
   );

@@ -4,6 +4,7 @@ import useDeletePost from "@/hooks/queries/useDeletePost";
 import { Post } from "@/types";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -11,6 +12,7 @@ import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import FeedProfile from "./FeedProfile";
 import ImagePreviewList from "./ImagePreviewList";
+import Vote from "./Vote";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -80,13 +82,38 @@ export default function FeedItem({ post, isDetail = false }: FeedItemProps) {
             )
           }
         />
+        {/* 텍스트 영역 */}
         <View style={styles.textContainer}>
           <Text style={styles.title}>{post.title}</Text>
           <Text style={styles.description}>{post.description}</Text>
         </View>
+        {/* 이미지 영역 */}
         <View style={styles.imageContainer}>
           <ImagePreviewList imageUris={post.imageUris} />
         </View>
+        {/* 투표 영역 */}
+        {!isDetail && post.hasVote && (
+          <View style={styles.voteContainer}>
+            <View style={styles.voteIconContainer}>
+              <MaterialCommunityIcons
+                name="vote"
+                size={24}
+                color={colors.ORANGE_600}
+              />
+              <Text style={styles.voteText}>투표</Text>
+            </View>
+            <Text style={styles.voteCountText}>
+              {post.voteCount}명 참여중...
+            </Text>
+          </View>
+        )}
+        {isDetail && post.hasVote && (
+          <Vote
+            postId={post.id}
+            postVote={post.votes ?? []}
+            voteCount={post.voteCount}
+          />
+        )}
       </View>
       <View style={styles.menuContainer}>
         <Pressable style={styles.menuItem}>
@@ -141,6 +168,32 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     marginTop: 14,
+  },
+  voteContainer: {
+    borderWidth: 1,
+    borderColor: colors.ORANGE_600,
+    backgroundColor: colors.ORANGE_100,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+  },
+  voteIconContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  voteText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: colors.ORANGE_600,
+  },
+  voteCountText: {
+    fontSize: 14,
+    color: colors.BLACK,
+    fontWeight: "600",
   },
   menuContainer: {
     flexDirection: "row",
