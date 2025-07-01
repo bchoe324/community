@@ -21,9 +21,10 @@ export default function Button({
         styles[variant],
         styles[size],
         pressed && styles.pressed,
+        props.disabled && styles.disabled,
       ]}
     >
-      <Text style={[styles.label, styles[variant]]}>{label}</Text>
+      <Text style={[styles.label, styles[`${variant}Text`]]}>{label}</Text>
     </Pressable>
   );
 }
@@ -42,17 +43,24 @@ const styles = StyleSheet.create({
   small: {},
   filled: {
     backgroundColor: colors.ORANGE_600,
-    color: colors.WHITE,
   },
   outlined: {},
-  standard: {
-    color: colors.ORANGE_600,
-  },
+  standard: {},
   pressed: {
     opacity: 0.5,
+  },
+  disabled: {
+    backgroundColor: colors.GRAY_300,
   },
   label: {
     fontSize: 14,
     fontWeight: "600",
+  },
+  filledText: {
+    color: colors.WHITE,
+  },
+  outlinedText: {},
+  standardText: {
+    color: colors.ORANGE_600,
   },
 });

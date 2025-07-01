@@ -1,10 +1,12 @@
 import { colors } from "@/constants";
 import useAuth from "@/hooks/queries/useAuth";
+import useCreateVote from "@/hooks/queries/useCreateVote";
 import { PostVote } from "@/types";
 import Feather from "@expo/vector-icons/Feather";
-import { Fragment } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import CommonButton from "./CommonButton";
+import VoteOption from "./VoteOption";
 
 interface VoteProps {
   postId: number;
@@ -14,6 +16,20 @@ interface VoteProps {
 
 export default function Vote({ postId, postVote, voteCount }: VoteProps) {
   const { auth } = useAuth();
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const createVote = useCreateVote();
+
+  const handleVote = () => {
+    if (!selectedId) {
+      Alert.alert("투표 항목을 선택해주세요.");
+      return;
+    }
+    createVote.mutate({
+      postId,
+      voteOptionId: selectedId,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -31,12 +47,25 @@ export default function Vote({ postId, postVote, voteCount }: VoteProps) {
           const isVoted = voteUsers.includes(Number(auth.id));
 
           return (
-            <Fragment key={vote.id}>
+            <View key={vote.id} style={styles.vote}>
               {vote.options.map((option) => (
-                <Text key={option.id}>{option.content}</Text>
+                <VoteOption
+                  key={option.id}
+                  option={option}
+                  isVoted={isVoted}
+                  totalCount={voteCount}
+                  isSelected={option.id === selectedId}
+                  onSelect={() => setSelectedId(Number(option.id))}
+                />
               ))}
-              {!isVoted && <CommonButton label="투표하기" />}
-            </Fragment>
+              {!isVoted && (
+                <CommonButton
+                  onPress={handleVote}
+                  disabled={!selectedId}
+                  label="투표하기"
+                />
+              )}
+            </View>
           );
         })}
       </View>
@@ -73,5 +102,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   content: {},
+  vote: {
+    gap: 8,
+  },
   buttonContainer: {},
 });
