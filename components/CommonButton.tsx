@@ -1,16 +1,25 @@
 import { colors } from "@/constants";
-import { Pressable, PressableProps, StyleSheet, Text } from "react-native";
+import {
+  Pressable,
+  PressableProps,
+  StyleProp,
+  StyleSheet,
+  Text,
+  ViewStyle,
+} from "react-native";
 
 interface ButtonProps extends PressableProps {
   label: string;
   variant?: "filled" | "outlined" | "standard";
   size?: "small" | "medium" | "large";
+  style?: StyleProp<ViewStyle>;
 }
 
 export default function Button({
   label,
   variant = "filled",
   size = "large",
+  style = null,
   ...props
 }: ButtonProps) {
   return (
@@ -22,6 +31,7 @@ export default function Button({
         styles[size],
         pressed && styles.pressed,
         props.disabled && styles.disabled,
+        style,
       ]}
     >
       <Text style={[styles.label, styles[`${variant}Text`]]}>{label}</Text>
@@ -39,12 +49,20 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 44,
   },
-  medium: {},
+  medium: {
+    height: 38,
+    alignSelf: "center",
+    paddingHorizontal: 12,
+  },
   small: {},
   filled: {
     backgroundColor: colors.ORANGE_600,
   },
-  outlined: {},
+  outlined: {
+    backgroundColor: colors.WHITE,
+    borderWidth: 1,
+    borderColor: colors.ORANGE_600,
+  },
   standard: {},
   pressed: {
     opacity: 0.5,
@@ -59,7 +77,9 @@ const styles = StyleSheet.create({
   filledText: {
     color: colors.WHITE,
   },
-  outlinedText: {},
+  outlinedText: {
+    color: colors.ORANGE_600,
+  },
   standardText: {
     color: colors.ORANGE_600,
   },
