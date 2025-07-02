@@ -26,6 +26,18 @@ export default function ProfileLayout() {
           ),
         }}
       />
+      <Stack.Screen
+        name="update"
+        options={{
+          headerTitle: "프로필 수정",
+          headerBackButtonDisplayMode: "minimal",
+          headerLeft: () => (
+            <Pressable onPress={() => router.back()}>
+              <Feather name="arrow-left" size={28} color={colors.BLACK} />
+            </Pressable>
+          ),
+        }}
+      />
     </Stack>
   );
 }

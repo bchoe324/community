@@ -37,4 +37,10 @@ async function getUserProfile(id: number): Promise<Profile> {
   return data;
 }
 
-export { getMe, getUserProfile, postLogin, postSignup };
+async function updateProfile(body: Partial<Profile>): Promise<Profile> {
+  const { data } = await axiosInstance.patch("/auth/me", body);
+
+  return data;
+}
+
+export { getMe, getUserProfile, postLogin, postSignup, updateProfile };

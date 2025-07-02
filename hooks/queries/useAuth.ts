@@ -1,4 +1,4 @@
-import { getMe, postLogin, postSignup } from "@/api/auth";
+import { getMe, postLogin, postSignup, updateProfile } from "@/api/auth";
 import { queryClient } from "@/api/queryClient";
 import { queryKeys } from "@/constants";
 import { deleteHeader, setHeader } from "@/utils/header";
@@ -57,10 +57,29 @@ function useSignup() {
   });
 }
 
+function useUpdateProfile() {
+  return useMutation({
+    mutationFn: updateProfile,
+    onSuccess: (newProfile) => {
+      // 현재 사용자 정보 업데이트
+      queryClient.setQueryData([queryKeys.AUTH, queryKeys.GET_ME], newProfile);
+
+      // 모든 포스트 관련 쿼리 무효화 (무한 쿼리 포함)
+      queryClient.invalidateQueries({ queryKey: [queryKeys.POSTS] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.POST] });
+
+      // 즉시 리페치하여 UI 업데이트
+      queryClient.refetchQueries({ queryKey: [queryKeys.POSTS] });
+      queryClient.refetchQueries({ queryKey: [queryKeys.POST] });
+    },
+  });
+}
+
 export default function useAuth() {
   const { data } = useGetMe();
   const loginMutation = useLogin();
   const signupMutation = useSignup();
+  const profileMutation = useUpdateProfile();
   const logout = () => {
     deleteHeader("Authorization");
     deleteSecureStore("accessToken");
@@ -75,6 +94,7 @@ export default function useAuth() {
     },
     loginMutation,
     signupMutation,
+    profileMutation,
     logout,
   };
 }

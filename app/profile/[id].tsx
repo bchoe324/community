@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   profileInfoContainer: {
     marginTop: 77,
     padding: 16,
+    gap: 16,
   },
   nickname: {
     fontSize: 24,
