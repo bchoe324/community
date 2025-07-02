@@ -24,6 +24,14 @@ async function getLikedPosts(page: number = 1): Promise<Post[]> {
   return data;
 }
 
+async function getUserPosts(userId: number, page: number = 1): Promise<Post[]> {
+  const { data } = await axiosInstance.get(
+    `/posts/user/${userId}?page=${page}`
+  );
+
+  return data;
+}
+
 async function deletePost(id: number): Promise<number> {
   const { data } = await axiosInstance.delete(`posts/${id}`);
 
@@ -70,6 +78,7 @@ export {
   getMyPosts,
   getPost,
   getPosts,
+  getUserPosts,
   likePost,
   updatePost,
 };

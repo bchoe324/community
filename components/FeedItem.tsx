@@ -84,7 +84,9 @@ export default function FeedItem({ post, isDetail = false }: FeedItemProps) {
           imageUri={post.author.imageUri}
           nickname={post.author.nickname}
           createdAt={dayjs(post.createdAt).fromNow()}
-          onPress={() => {}}
+          onPress={() => {
+            router.push(`/profile/${post.author.id}`);
+          }}
           option={
             Number(auth.id) === post.author.id && (
               <Pressable onPress={handlePressOption}>

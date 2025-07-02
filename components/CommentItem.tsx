@@ -5,6 +5,7 @@ import { Comment } from "@/types/index";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import FeedProfile from "./FeedProfile";
 
@@ -81,7 +82,11 @@ export default function CommentItem({
           imageUri={comment.user.imageUri}
           nickname={comment.isDeleted ? "(삭제)" : comment.user.nickname}
           createdAt={comment.createdAt}
-          onPress={() => {}}
+          onPress={() => {
+            comment.isDeleted
+              ? null
+              : router.push(`/profile/${comment.user.id}`);
+          }}
           option={
             comment.user.id === auth?.id && (
               <Pressable onPress={handlePressOption}>
